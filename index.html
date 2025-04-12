@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة وقت السفر</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>حاسبة وقت السفر بالسيارة</h2>
+        <label for="distance">أدخل المسافة (كيلومتر):</label>
+        <input type="number" id="distance" placeholder="مثال: 200" min="1">
+        <br>
+        <label for="speed">أدخل السرعة (كم/ساعة):</label>
+        <input type="number" id="speed" placeholder="مثال: 80" min="1">
+        <br>
+        <button onclick="calculateTime()">احسب الوقت</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculateTime() {
+            const distance = parseFloat(document.getElementById("distance").value);
+            const speed = parseFloat(document.getElementById("speed").value);
+            const resultDiv = document.getElementById("result");
+
+            // التحقق من صحة المدخلات
+            if (isNaN(distance) || distance <= 0) {
+                resultDiv.innerHTML = "<p style='color:red;'>الرجاء إدخال مسافة صحيحة!</p>";
+                return;
+            }
+            if (isNaN(speed) || speed <= 0) {
+                resultDiv.innerHTML = "<p style='color:red;'>الرجاء إدخال سرعة صحيحة!</p>";
+                return;
+            }
+
+            // حساب الوقت
+            const timeHours = distance / speed; // الوقت بالساعات
+            const hours = Math.floor(timeHours); // عدد الساعات
+            const minutes = Math.round((timeHours - hours) * 60); // عدد الدقائق
+
+            // عرض النتيجة
+            resultDiv.innerHTML = `
+                <h3>الوقت اللازم لقطع ${distance} كم:</h3>
+                <p>بسرعة ${speed} كم/ساعة: ${hours} ساعة و ${minutes} دقيقة</p>
+            `;
+        }
+    </script>
+</body>
+</html>
