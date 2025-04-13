@@ -1,85 +1,108 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة وقت السفر</title>
+    <title>حاسبة البنزين</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
+            text-align: center;
+            direction: rtl;
+            margin: 20px;
         }
         .container {
-            background-color: white;
+            max-width: 500px;
+            margin: auto;
             padding: 20px;
+            border: 1px solid #ccc;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
         }
         input, button {
-            padding: 10px;
             margin: 10px;
-            font-size: 16px;
+            padding: 5px;
+            width: 200px;
         }
         button {
             background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
         }
         button:hover {
             background-color: #45a049;
         }
         #result {
             margin-top: 20px;
-            font-size: 18px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>حاسبة وقت السفر بالسيارة</h2>
-        <label for="distance">أدخل المسافة (كيلومتر):</label>
-        <input type="number" id="distance" placeholder="مثال: 200" min="1">
-        <br>
-        <label for="speed">أدخل السرعة (كم/ساعة):</label>
-        <input type="number" id="speed" placeholder="مثال: 80" min="1">
-        <br>
-        <button onclick="calculateTime()">احسب الوقت</button>
+        <h2>حاسبة البنزين</h2>
+        <label>سعر اللتر الواحد (بالدرهم المغربي):</label><br>
+        <input type="number" id="fuelPrice" placeholder="أدخل سعر اللتر"><br>
+
+        <label>استهلاك السيارة (لتر/100 كم):</label><br>
+        <input type="number" id="fuelEfficiency" placeholder="أدخل النسبة (مثل 6 لـ 6%)"><br>
+
+        <label>المسافة (كيلومتر):</label><br>
+        <input type="number" id="distance" placeholder="أدخل المسافة"><br>
+
+        <label>السرعة المتوسطة (كم/ساعة):</label><br>
+        <input type="number" id="speed" placeholder="أدخل السرعة"><br>
+
+        <button onclick="calculate()">احسب</button>
+
         <div id="result"></div>
     </div>
 
     <script>
-        function calculateTime() {
-            const distance = parseFloat(document.getElementById("distance").value);
-            const speed = parseFloat(document.getElementById("speed").value);
-            const resultDiv = document.getElementById("result");
+        function calculate() {
+            // الحصول على القيم من المدخلات
+            let fuelPrice = parseFloat(document.getElementById("fuelPrice").value);
+            let fuelEfficiency = parseFloat(document.getElementById("fuelEfficiency").value);
+            let distance = parseFloat(document.getElementById("distance").value);
+            let speed = parseFloat(document.getElementById("speed").value);
 
             // التحقق من صحة المدخلات
-            if (isNaN(distance) || distance <= 0) {
-                resultDiv.innerHTML = "<p style='color:red;'>الرجاء إدخال مسافة صحيحة!</p>";
-                return;
-            }
-            if (isNaN(speed) || speed <= 0) {
-                resultDiv.innerHTML = "<p style='color:red;'>الرجاء إدخال سرعة صحيحة!</p>";
+            if (isNaN(fuelPrice) || isNaN(fuelEfficiency) || isNaN(distance) || isNaN(speed) || fuelPrice <= 0 || fuelEfficiency <= 0 || distance <= 0 || speed <= 0) {
+                document.getElementById("result").innerHTML = "يرجى إدخال قيم صحيحة وإيجابية!";
                 return;
             }
 
-            // حساب الوقت
-            const timeHours = distance / speed; // الوقت بالساعات
-            const hours = Math.floor(timeHours); // عدد الساعات
-            const minutes = Math.round((timeHours - hours) * 60); // عدد الدقائق
+            // حساب كمية الوقود المطلوبة (لتر)
+            let fuelNeeded = (distance / 100) * fuelEfficiency;
 
-            // عرض النتيجة
-            resultDiv.innerHTML = `
-                <h3>الوقت اللازم لقطع ${distance} كم:</h3>
-                <p>بسرعة ${speed} كم/ساعة: ${hours} ساعة و ${minutes} دقيقة</p>
+            // حساب التكلفة الإجمالية
+            let totalCost = fuelNeeded * fuelPrice;
+
+            // حساب الوقت المستغرق (ساعات)
+            let timeNeeded = distance / speed;
+
+            // تحويل الوقت إلى ساعات ودقائق
+            let hours = Math.floor(timeNeeded);
+            let minutes = Math.round((timeNeeded - hours) * 60);
+
+            // إذا كانت الدقائق 60، زيادة الساعات بـ1 وتصفير الدقائق
+            if (minutes === 60) {
+                hours += 1;
+                minutes = 0;
+            }
+
+            // تنسيق نص الوقت
+            let timeText = hours > 0 ? `${hours} ساعة` : '';
+            timeText += hours > 0 && minutes > 0 ? ' و' : '';
+            timeText += minutes > 0 ? `${minutes} دقيقة` : '';
+            timeText = timeText || 'أقل من دقيقة';
+
+            // عرض النتائج
+            document.getElementById("result").innerHTML = `
+                <p>كمية الوقود المطلوبة: ${fuelNeeded.toFixed(2)} لتر</p>
+                <p>التكلفة الإجمالية: ${totalCost.toFixed(2)} درهم مغربي</p>
+                <p>الوقت المستغرق: ${timeText}</p>
+                <p>المسافة: ${distance} كيلومتر</p>
             `;
         }
     </script>
