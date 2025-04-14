@@ -18,7 +18,7 @@
             border: 1px solid #ccc;
             border-radius: 10px;
         }
-        input, button {
+        input, select, button {
             margin: 10px;
             padding: 5px;
             width: 200px;
@@ -41,7 +41,22 @@
 <body>
     <div class="container">
         <h2>حاسبة البنزين</h2>
-        <label>سعر اللتر الواحد (بالدرهم المغربي):</label><br>
+        <label>اختر العملة:</label><br>
+        <select id="currencyName">
+            <option value="درهم مغربي">درهم مغربي</option>
+            <option value="دينار جزائري">دينار جزائري</option>
+            <option value="درهم إماراتي">درهم إماراتي</option>
+            <option value="دينار تونسي">دينار تونسي</option>
+            <option value="دينار ليبي">دينار ليبي</option>
+            <option value="جنيه مصري">جنيه مصري</option>
+            <option value="ريال قطري">ريال قطري</option>
+            <option value="ريال سعودي">ريال سعودي</option>
+            <option value="دينار كويتي">دينار كويتي</option>
+            <option value="ريال يمني">ريال يمني</option>
+            <option value="أوقية موريتانية">أوقية موريتانية</option>
+        </select><br>
+
+        <label>سعر اللتر الواحد (بالعملة المختارة):</label><br>
         <input type="number" id="fuelPrice" placeholder="أدخل سعر اللتر"><br>
 
         <label>استهلاك السيارة (لتر/100 كم):</label><br>
@@ -61,6 +76,7 @@
     <script>
         function calculate() {
             // الحصول على القيم من المدخلات
+            let currencyName = document.getElementById("currencyName").value;
             let fuelPrice = parseFloat(document.getElementById("fuelPrice").value);
             let fuelEfficiency = parseFloat(document.getElementById("fuelEfficiency").value);
             let distance = parseFloat(document.getElementById("distance").value);
@@ -100,7 +116,7 @@
             // عرض النتائج
             document.getElementById("result").innerHTML = `
                 <p>كمية الوقود المطلوبة: ${fuelNeeded.toFixed(2)} لتر</p>
-                <p>التكلفة الإجمالية: ${totalCost.toFixed(2)} درهم مغربي</p>
+                <p>التكلفة الإجمالية: ${totalCost.toFixed(2)} ${currencyName}</p>
                 <p>الوقت المستغرق: ${timeText}</p>
                 <p>المسافة: ${distance} كيلومتر</p>
             `;
