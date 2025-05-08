@@ -1,126 +1,276 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة البنزين</title>
+    <title>حاسبة تكلفة السفر الموسعة في المغرب</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            direction: rtl;
+            font-family: 'Arial', sans-serif;
             margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: right;
         }
         .container {
-            max-width: 500px;
-            margin: auto;
+            background-color: #fff;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
         }
-        input, select, button {
-            margin: 10px;
-            padding: 5px;
-            width: 200px;
+        h1 {
+            color: #5a5a5a;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
         button {
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
+            padding: 12px 20px;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
-        #result {
+        #results {
             margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+        #results p {
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+        #results p span {
+            font-weight: bold;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .error {
+            color: red;
             font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>حاسبة البنزين</h2>
-        <label>اختر العملة:</label><br>
-        <select id="currencyName">
-            <option value="درهم مغربي">درهم مغربي</option>
-            <option value="دينار جزائري">دينار جزائري</option>
-            <option value="درهم إماراتي">درهم إماراتي</option>
-            <option value="دينار تونسي">دينار تونسي</option>
-            <option value="دينار ليبي">دينار ليبي</option>
-            <option value="جنيه مصري">جنيه مصري</option>
-            <option value="ريال قطري">ريال قطري</option>
-            <option value="ريال سعودي">ريال سعودي</option>
-            <option value="دينار كويتي">دينار كويتي</option>
-            <option value="ريال يمني">ريال يمني</option>
-            <option value="أوقية موريتانية">أوقية موريتانية</option>
-        </select><br>
+        <h1>حاسبة تكلفة السفر الموسعة في المغرب</h1>
 
-        <label>سعر اللتر الواحد (بالعملة المختارة):</label><br>
-        <input type="number" id="fuelPrice" placeholder="أدخل سعر اللتر"><br>
+        <label for="fromCity">من مدينة:</label>
+        <select id="fromCity" name="fromCity">
+            <option value="Casablanca">الدار البيضاء</option>
+            <option value="Rabat">الرباط</option>
+            <option value="Marrakech">مراكش</option>
+            <option value="Fes">فاس</option>
+            <option value="Tangier">طنجة</option>
+            <option value="Agadir">أكادير</option>
+            <option value="Meknes">مكناس</option>
+            <option value="Oujda">وجدة</option>
+            <option value="Tetouan">تطوان</option>
+            <option value="Kenitra">القنيطرة</option>
+        </select>
 
-        <label>استهلاك السيارة (لتر/100 كم):</label><br>
-        <input type="number" id="fuelEfficiency" placeholder="أدخل النسبة (مثل 6 لـ 6%)"><br>
+        <label for="toCity">إلى مدينة:</label>
+        <select id="toCity" name="toCity">
+            <option value="Rabat">الرباط</option>
+            <option value="Casablanca">الدار البيضاء</option>
+            <option value="Marrakech">مراكش</option>
+            <option value="Fes">فاس</option>
+            <option value="Tangier">طنجة</option>
+            <option value="Agadir">أكادير</option>
+            <option value="Meknes">مكناس</option>
+            <option value="Oujda">وجدة</option>
+            <option value="Tetouan">تطوان</option>
+            <option value="Kenitra">القنيطرة</option>
+        </select>
 
-        <label>المسافة (كيلومتر):</label><br>
-        <input type="number" id="distance" placeholder="أدخل المسافة"><br>
+        <label for="vehicleClass">فئة المركبة:</label>
+        <select id="vehicleClass" name="vehicleClass">
+            <option value="1">الفئة 1 (سيارة خفيفة/اقتصادية)</option>
+            <option value="2">الفئة 2 (سيارة متوسطة)</option>
+            <option value="3">الفئة 3 (مركبة كبيرة/دفع رباعي/شاحنة خفيفة)</option>
+        </select>
 
-        <label>السرعة المتوسطة (كم/ساعة):</label><br>
-        <input type="number" id="speed" placeholder="أدخل السرعة"><br>
+        <label for="fuelConsumption">استهلاك الوقود (لتر/100 كم):</label>
+        <input type="number" id="fuelConsumption" name="fuelConsumption" placeholder="اتركه فارغًا للاستهلاك الافتراضي">
+        <p class="note">الافتراضي: فئة 1 (6 ل/100كم)، فئة 2 (8 ل/100كم)، فئة 3 (12 ل/100كم)</p>
 
-        <button onclick="calculate()">احسب</button>
+        <label for="averageSpeed">متوسط السرعة (كم/ساعة):</label>
+        <input type="number" id="averageSpeed" name="averageSpeed" placeholder="اتركه فارغًا للسرعة الافتراضية (100 كم/س)">
+        <p class="note">الافتراضي للطريق السيار 120 كم/س، للطرق الوطنية 100 كم/س. سيتم استخدام 100 كم/س كمتوسط عام إذا ترك فارغاً.</p>
+        
+        <label for="fuelPrice">سعر لتر البنزين (درهم):</label>
+        <input type="number" id="fuelPrice" name="fuelPrice" value="12.73" step="0.01">
+        <p class="note">السعر الحالي التقريبي (مايو 2025).</p>
 
-        <div id="result"></div>
+        <button onclick="calculateCost()">احسب التكلفة</button>
+
+        <div id="results" style="display:none;">
+            <h2>النتائج:</h2>
+            <p id="routeInfo"></p>
+            <p>المسافة: <span id="distanceResult"></span> كم</p>
+            <p>الوقت المقدر للرحلة: <span id="timeResult"></span></p>
+            <p>تكلفة الطريق السيار: <span id="tollResult"></span> درهم</p>
+            <p>تكلفة الوقود: <span id="fuelResult"></span> درهم</p>
+            <p>التكلفة الإجمالية المقدرة: <span id="totalResult"></span> درهم</p>
+            <p class="note" id="tollNote"></p>
+        </div>
     </div>
 
     <script>
-        function calculate() {
-            // الحصول على القيم من المدخلات
-            let currencyName = document.getElementById("currencyName").value;
-            let fuelPrice = parseFloat(document.getElementById("fuelPrice").value);
-            let fuelEfficiency = parseFloat(document.getElementById("fuelEfficiency").value);
-            let distance = parseFloat(document.getElementById("distance").value);
-            let speed = parseFloat(document.getElementById("speed").value);
+        const routeData = {
+            // المسافات بالكيلومتر، رسوم الطريق السيار بالدرهم للفئات 1, 2, 3
+            // المصدر الأساسي للمسافات: moroccan_routes_data.md (بحث يدوي)
+            // مصدر رسوم الدار البيضاء-القنيطرة: grille-tarifaire.pdf (طلب سابق)
+            // باقي رسوم الطرق السيارة هي تقديرية أو تشير لعدم توفر بيانات دقيقة للطريق السيار المباشر
+            "Casablanca-Rabat": { distance: 86, toll: { "1": 23, "2": 35, "3": 50 }, name: "الدار البيضاء - الرباط" },
+            "Rabat-Casablanca": { distance: 86, toll: { "1": 23, "2": 35, "3": 50 }, name: "الرباط - الدار البيضاء" },
+            "Casablanca-Marrakech": { distance: 241, toll: { "1": 70, "2": 100, "3": 150 }, name: "الدار البيضاء - مراكش" },
+            "Marrakech-Casablanca": { distance: 241, toll: { "1": 70, "2": 100, "3": 150 }, name: "مراكش - الدار البيضاء" },
+            "Casablanca-Fes": { distance: 299, toll: { "1": 60, "2": 90, "3": 135 }, name: "الدار البيضاء - فاس" }, // تقديري
+            "Fes-Casablanca": { distance: 299, toll: { "1": 60, "2": 90, "3": 135 }, name: "فاس - الدار البيضاء" }, // تقديري
+            "Casablanca-Tangier": { distance: 342, toll: { "1": 120, "2": 180, "3": 270 }, name: "الدار البيضاء - طنجة" }, // تقديري
+            "Tangier-Casablanca": { distance: 342, toll: { "1": 120, "2": 180, "3": 270 }, name: "طنجة - الدار البيضاء" }, // تقديري
+            "Casablanca-Agadir": { distance: 453, toll: { "1": 150, "2": 220, "3": 330 }, name: "الدار البيضاء - أكادير" }, // تقديري
+            "Agadir-Casablanca": { distance: 453, toll: { "1": 150, "2": 220, "3": 330 }, name: "أكادير - الدار البيضاء" }, // تقديري
+            "Casablanca-Meknes": { distance: 242, toll: { "1": 50, "2": 75, "3": 110 }, name: "الدار البيضاء - مكناس" }, // تقديري
+            "Meknes-Casablanca": { distance: 242, toll: { "1": 50, "2": 75, "3": 110 }, name: "مكناس - الدار البيضاء" }, // تقديري
+            "Casablanca-Oujda": { distance: 614, toll: { "1": 0, "2": 0, "3": 0 }, name: "الدار البيضاء - وجدة" }, // نفترض عدم وجود طريق سيار مباشر أو بيانات غير متوفرة
+            "Oujda-Casablanca": { distance: 614, toll: { "1": 0, "2": 0, "3": 0 }, name: "وجدة - الدار البيضاء" },
+            "Casablanca-Tetouan": { distance: 340, toll: { "1": 0, "2": 0, "3": 0 }, name: "الدار البيضاء - تطوان" },
+            "Tetouan-Casablanca": { distance: 340, toll: { "1": 0, "2": 0, "3": 0 }, name: "تطوان - الدار البيضاء" },
+            "Casablanca-Kenitra": { distance: 130, toll: { "1": 35, "2": 53, "3": 70 }, name: "الدار البيضاء - القنيطرة" },
+            "Kenitra-Casablanca": { distance: 130, toll: { "1": 35, "2": 53, "3": 70 }, name: "القنيطرة - الدار البيضاء" },
+            "Rabat-Kenitra": { distance: 45, toll: { "1": 10, "2": 15, "3": 20 }, name: "الرباط - القنيطرة" }, // تقديري
+            "Kenitra-Rabat": { distance: 45, toll: { "1": 10, "2": 15, "3": 20 }, name: "القنيطرة - الرباط" }, // تقديري
+            "Rabat-Tangier": { distance: 250, toll: { "1": 90, "2": 135, "3": 200 }, name: "الرباط - طنجة" }, // تقديري
+            "Tangier-Rabat": { distance: 250, toll: { "1": 90, "2": 135, "3": 200 }, name: "طنجة - الرباط" }, // تقديري
+            "Fes-Meknes": { distance: 60, toll: { "1": 15, "2": 25, "3": 35 }, name: "فاس - مكناس" }, // تقديري
+            "Meknes-Fes": { distance: 60, toll: { "1": 15, "2": 25, "3": 35 }, name: "مكناس - فاس" }, // تقديري
+            // يمكن إضافة المزيد من المسارات هنا
+        };
 
-            // التحقق من صحة المدخلات
-            if (isNaN(fuelPrice) || isNaN(fuelEfficiency) || isNaN(distance) || isNaN(speed) || fuelPrice <= 0 || fuelEfficiency <= 0 || distance <= 0 || speed <= 0) {
-                document.getElementById("result").innerHTML = "يرجى إدخال قيم صحيحة وإيجابية!";
+        const defaultFuelConsumption = {
+            "1": 6,  // لتر/100 كم للفئة 1
+            "2": 8,  // لتر/100 كم للفئة 2
+            "3": 12 // لتر/100 كم للفئة 3
+        };
+
+        function calculateCost() {
+            const fromCity = document.getElementById('fromCity').value;
+            const toCity = document.getElementById('toCity').value;
+            const vehicleClass = document.getElementById('vehicleClass').value;
+            
+            let fuelConsumption = parseFloat(document.getElementById('fuelConsumption').value);
+            if (isNaN(fuelConsumption) || fuelConsumption <= 0) {
+                fuelConsumption = defaultFuelConsumption[vehicleClass];
+            }
+
+            let averageSpeed = parseFloat(document.getElementById('averageSpeed').value);
+            if (isNaN(averageSpeed) || averageSpeed <= 0) {
+                averageSpeed = 100; // سرعة افتراضية عامة للطرق الطويلة
+            }
+
+            const fuelPrice = parseFloat(document.getElementById('fuelPrice').value);
+
+            const resultsDiv = document.getElementById('results');
+            const distanceResultEl = document.getElementById('distanceResult');
+            const timeResultEl = document.getElementById('timeResult');
+            const tollResultEl = document.getElementById('tollResult');
+            const fuelResultEl = document.getElementById('fuelResult');
+            const totalResultEl = document.getElementById('totalResult');
+            const routeInfoEl = document.getElementById('routeInfo');
+            const tollNoteEl = document.getElementById('tollNote');
+
+            resultsDiv.style.display = 'none'; // إخفاء النتائج القديمة
+            routeInfoEl.innerHTML = '';
+            tollNoteEl.innerText = '';
+
+            if (fromCity === toCity) {
+                routeInfoEl.innerHTML = '<p class="error">الرجاء اختيار مدينتي انطلاق ووصول مختلفتين.</p>';
+                resultsDiv.style.display = 'block';
+                distanceResultEl.innerText = '0';
+                timeResultEl.innerText = '0 ساعات';
+                tollResultEl.innerText = '0';
+                fuelResultEl.innerText = '0';
+                totalResultEl.innerText = '0';
                 return;
             }
 
-            // حساب كمية الوقود المطلوبة (لتر)
-            let fuelNeeded = (distance / 100) * fuelEfficiency;
+            const routeKey = `${fromCity}-${toCity}`;
+            const selectedRoute = routeData[routeKey];
 
-            // حساب التكلفة الإجمالية
-            let totalCost = fuelNeeded * fuelPrice;
-
-            // حساب الوقت المستغرق (ساعات)
-            let timeNeeded = distance / speed;
-
-            // تحويل الوقت إلى ساعات ودقائق
-            let hours = Math.floor(timeNeeded);
-            let minutes = Math.round((timeNeeded - hours) * 60);
-
-            // إذا كانت الدقائق 60، زيادة الساعات بـ1 وتصفير الدقائق
-            if (minutes === 60) {
-                hours += 1;
-                minutes = 0;
+            if (!selectedRoute) {
+                routeInfoEl.innerHTML = `<p class="error">المسار من ${fromCity} إلى ${toCity} غير محدد حالياً في قاعدة البيانات. المسافات وتكاليف الطريق السيار متوفرة للمسارات الرئيسية فقط.</p>`;
+                resultsDiv.style.display = 'block';
+                distanceResultEl.innerText = 'N/A';
+                timeResultEl.innerText = 'N/A';
+                tollResultEl.innerText = 'N/A';
+                fuelResultEl.innerText = 'N/A';
+                totalResultEl.innerText = 'N/A';
+                return;
             }
 
-            // تنسيق نص الوقت
-            let timeText = hours > 0 ? `${hours} ساعة` : '';
-            timeText += hours > 0 && minutes > 0 ? ' و' : '';
-            timeText += minutes > 0 ? `${minutes} دقيقة` : '';
-            timeText = timeText || 'أقل من دقيقة';
+            const distance = selectedRoute.distance;
+            const tollCost = selectedRoute.toll[vehicleClass] !== undefined ? selectedRoute.toll[vehicleClass] : 0;
+            
+            if (selectedRoute.toll[vehicleClass] === undefined || (selectedRoute.toll["1"] === 0 && selectedRoute.toll["2"] === 0 && selectedRoute.toll["3"] === 0 && routeKey !== "Casablanca-Oujda" && routeKey !== "Oujda-Casablanca" && routeKey !== "Casablanca-Tetouan" && routeKey !== "Tetouan-Casablanca")) {
+                 tollNoteEl.innerText = "ملاحظة: تكلفة الطريق السيار لهذا المسار قد تكون غير متوفرة بدقة أو أن المسار لا يتضمن طريق سيار مباشر بالكامل.";
+            } else if (routeKey === "Casablanca-Kenitra" || routeKey === "Kenitra-Casablanca") {
+                tollNoteEl.innerText = "تكلفة الطريق السيار بين الدار البيضاء والقنيطرة مبنية على البيانات الرسمية.";
+            } else {
+                tollNoteEl.innerText = "ملاحظة: تكلفة الطريق السيار لمعظم المسارات هي تقديرية.";
+            }
 
-            // عرض النتائج
-            document.getElementById("result").innerHTML = `
-                <p>كمية الوقود المطلوبة: ${fuelNeeded.toFixed(2)} لتر</p>
-                <p>التكلفة الإجمالية: ${totalCost.toFixed(2)} ${currencyName}</p>
-                <p>الوقت المستغرق: ${timeText}</p>
-                <p>المسافة: ${distance} كيلومتر</p>
-            `;
+
+            // حساب الوقت
+            const timeInHours = distance / averageSpeed;
+            const hours = Math.floor(timeInHours);
+            const minutes = Math.round((timeInHours - hours) * 60);
+            const timeString = `${hours} ساعة و ${minutes} دقيقة`;
+
+            // حساب تكلفة الوقود
+            const fuelNeeded = (distance / 100) * fuelConsumption;
+            const fuelCost = fuelNeeded * fuelPrice;
+
+            // حساب التكلفة الإجمالية
+            const totalCost = tollCost + fuelCost;
+            
+            routeInfoEl.innerHTML = `<h3>تفاصيل الرحلة من ${selectedRoute.name.split(' - ')[0]} إلى ${selectedRoute.name.split(' - ')[1]}:</h3>`;
+            distanceResultEl.innerText = distance.toFixed(2);
+            timeResultEl.innerText = timeString;
+            tollResultEl.innerText = tollCost.toFixed(2);
+            fuelResultEl.innerText = fuelCost.toFixed(2);
+            totalResultEl.innerText = totalCost.toFixed(2);
+
+            resultsDiv.style.display = 'block';
         }
     </script>
+
 </body>
 </html>
+
